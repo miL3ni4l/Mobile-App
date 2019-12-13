@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.e.tugasprogmob">
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="KRS SI"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/title_activity_settings"></activity>
+        <activity
+            android:name=".Admin.Insert.InsertKrsActivity"
+            android:label="SI KRS - Hai [Nama Admin]" />
+        <activity
+            android:name=".Admin.Insert.InsertMatkulActivity"
+            android:label="SI KRS - Hai [Nama Admin]"></activity>
+        <activity
+            android:name=".Admin.Insert.InsertMhsActivity"
+            android:label="SI KRS - Hai [Nama Admin]" />
+        <activity
+            android:name=".Admin.KrsAdminActivity"
+            android:label="SI KRS - Hai [Nama Admin]" />
+        <activity
+            android:name=".Admin.MatkulAdminActivity"
+            android:label="SI KRS - Hai [Nama Admin]" />
+        <activity
+            android:name=".Admin.DaftarMahasiswaActivity"
+            android:label="SI KRS - Hai [Nama Admin]" />
+        <activity
+            android:name=".Admin.Insert.InsertDosenActivity"
+            android:label="SI KRS - Hai [Nama Admin]" />
+        <activity
+            android:name=".Admin.DaftarDosenActivity"
+            android:label="SI KRS - Hai [Nama Admin]" />
+        <activity
+            android:name=".Dosen.MatkulDsnActivity"
+            android:label="SI KRS - Hai [Nama Dosen]" />
+        <activity
+            android:name=".Dosen.DataDiriActivity"
+            android:label="SI KRS - Hai [Nama Dosen]" />
+        <activity
+            android:name=".Admin.HCAdminActivity"
+            android:label="SI KRS - Hai [Nama Admin]"></activity>
+        <activity
+            android:name=".Dosen.KrsDsnActivity"
+            android:label="SI KRS - Hai [Nama Dosen]" />
+        <activity
+            android:name=".Dosen.HCDosenActivity"
+            android:label="SI KRS - Hai [Nama Dosen]" />
+        <activity android:name=".SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".MainActivity"></activity>
+    </application>
+
+</manifest>
