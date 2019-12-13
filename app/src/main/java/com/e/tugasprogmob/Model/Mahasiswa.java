@@ -1,23 +1,33 @@
 package com.e.tugasprogmob.Model;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Mahasiswa {
-    private String NIDN;
+    @SerializedName("id")
+    private int id;
+    @SerializedName("nim")
+    private String nim;
+    @SerializedName("nama")
     private String nama;
-    private String gelar;
+    @SerializedName("email")
     private String email;
-    public Mahasiswa(String NIDN,String nama,String gelar,String email){
-        this.setNIDN(NIDN);
+    @SerializedName("alamat")
+    private String alamat;
+    @SerializedName("Foto")
+    private String Foto;
+    /*public Mahasiswa(String nim, String nama, String gelar, String email){
+        this.setNim(nim);
         this.setNama(nama);
         this.setGelar(gelar);
         this.setEmail(email);
+    }*/
+
+    public String getNim() {
+        return nim;
     }
 
-    public String getNIDN() {
-        return NIDN;
-    }
-
-    public void setNIDN(String NIDN) {
-        this.NIDN = NIDN;
+    public void setNim(String nim) {
+        this.nim = nim;
     }
 
     public String getNama() {
@@ -27,20 +37,35 @@ public class Mahasiswa {
     public void setNama(String nama) {
         this.nama = nama;
     }
-
-    public String getGelar() {
-        return gelar;
-    }
-
-    public void setGelar(String gelar) {
-        this.gelar = gelar;
-    }
-
     public String getEmail() {
         return email;
     }
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getAlamat() {
+        return alamat;
+    }
+
+    public void setAlamat(String alamat) {
+        this.alamat = alamat;
+    }
+
+    public String getFoto() {
+        return Foto;
+    }
+
+    public void setFoto(String foto) {
+        Foto = foto;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

@@ -2,6 +2,7 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/dsnCardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardUseCompatPadding="true">
@@ -14,7 +15,6 @@
             android:id="@+id/txtAlamat"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="TextView"
             app:layout_constraintEnd_toStartOf="@+id/imgFoto"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txtEmail" />
@@ -33,7 +33,6 @@
             android:id="@+id/txtGelar"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="TextView"
             app:layout_constraintEnd_toStartOf="@+id/imgFoto"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txtNIDN" />
@@ -42,7 +41,6 @@
             android:id="@+id/txtEmail"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="TextView"
             app:layout_constraintEnd_toStartOf="@+id/imgFoto"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txtGelar" />

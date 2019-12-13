@@ -35,6 +35,7 @@
             android:label="SI KRS - Hai [Nama Admin]" />
         <activity
             android:name=".Admin.Insert.InsertDosenActivity"
+            android:theme="@style/Theme.AppCompat.Light"
             android:label="SI KRS - Hai [Nama Admin]" />
         <activity
             android:name=".Admin.DaftarDosenActivity"

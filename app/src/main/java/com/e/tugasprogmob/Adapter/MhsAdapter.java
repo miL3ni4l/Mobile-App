@@ -12,35 +12,33 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.e.tugasprogmob.Model.Dosen;
+import com.e.tugasprogmob.Model.Mahasiswa;
 import com.e.tugasprogmob.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class DosenAdapter extends RecyclerView.Adapter<DosenAdapter.ViewHolder> {
-
-    private ArrayList<Dosen> dataList;
+public class MhsAdapter extends RecyclerView.Adapter<MhsAdapter.ViewHolder>{
+    private ArrayList<Mahasiswa> dataList;
     private Context context;
 
-    public DosenAdapter(ArrayList<Dosen> dataList){
+    public MhsAdapter(ArrayList<Mahasiswa> dataList){
         this.dataList=dataList;
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public MhsAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View view = layoutInflater.inflate(R.layout.card_view_dosen,parent,false);
         context = parent.getContext();
-        return new ViewHolder(view);
+        return new MhsAdapter.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.txtNIDN.setText(dataList.get(position).getNidn());
+    public void onBindViewHolder(@NonNull MhsAdapter.ViewHolder holder, int position) {
+        holder.txtNim.setText(dataList.get(position).getNim());
         holder.txtNama.setText(dataList.get(position).getNama());
-        holder.txtGelar.setText(dataList.get(position).getGelar());
         holder.txtEmail.setText(dataList.get(position).getEmail());
         holder.txtAlamat.setText(dataList.get(position).getAlamat());
         holder.img.getLayoutParams().width=200;
@@ -58,19 +56,18 @@ public class DosenAdapter extends RecyclerView.Adapter<DosenAdapter.ViewHolder> 
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder
-    implements View.OnCreateContextMenuListener{
-        private TextView txtNIDN,txtNama, txtGelar, txtEmail, txtAlamat;
+            implements View.OnCreateContextMenuListener{
+        private TextView txtNim,txtNama, txtEmail, txtAlamat;
         private ImageView img;
         private CardView cd;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            txtNIDN = itemView.findViewById(R.id.txtNIDN);
+            txtNim = itemView.findViewById(R.id.txtNIDN);
             txtNama = itemView.findViewById(R.id.txtNama);
-            txtGelar = itemView.findViewById(R.id.txtGelar);
             txtEmail = itemView.findViewById(R.id.txtEmail);
             txtAlamat = itemView.findViewById(R.id.txtAlamat);
             img = itemView.findViewById(R.id.imgFoto);
-            cd = itemView.findViewById(R.id.dsnCardView);
+            cd = itemView.findViewById(R.id.rvdd);
             itemView.setOnCreateContextMenuListener(this);
 
         }
@@ -82,5 +79,4 @@ public class DosenAdapter extends RecyclerView.Adapter<DosenAdapter.ViewHolder> 
         }
 
     }
-
 }

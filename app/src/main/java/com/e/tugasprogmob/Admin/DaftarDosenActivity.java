@@ -46,7 +46,7 @@ public class DaftarDosenActivity extends AppCompatActivity {
         getAllDataDosen();
         recyclerView = findViewById(R.id.rvdd);
 
-        Call<ArrayList<Dosen>> call = dataDosenService.getDosenAll("0168");// memanggil data yang sudah ada
+        Call<ArrayList<Dosen>> call = dataDosenService.getDosenAll("72170155");// memanggil data yang sudah ada
         call.enqueue(new Callback<ArrayList<Dosen>>() {
             @Override
             public void onResponse(Call<ArrayList<Dosen>> call, Response<ArrayList<Dosen>> response) {

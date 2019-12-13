@@ -2,7 +2,6 @@ package com.e.tugasprogmob.Admin.Insert;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -14,9 +13,10 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
@@ -31,13 +31,11 @@ import com.e.tugasprogmob.Admin.RetrofitClient;
 import com.e.tugasprogmob.MainActivity;
 import com.e.tugasprogmob.Model.Dosen;
 import com.e.tugasprogmob.R;
-
+import com.squareup.picasso.Picasso;
 
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.time.Instant;
-import java.time.temporal.TemporalAdjuster;
 import java.util.List;
 
 import retrofit2.Call;
@@ -58,11 +56,9 @@ public class InsertDosenActivity extends AppCompatActivity {
     ImageView part_image;
     final int FILE_ACCESS_REQUES_CODE=58;
     byte[] Imagebyte;
-    String Image;
-    private Instant Picasso;
+    String Image, valid_email;
 
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,30 +73,19 @@ public class InsertDosenActivity extends AppCompatActivity {
         part_image = findViewById(R.id.imgGambar);
         edtPathFoto = findViewById(R.id.txtFoto);
 
-        //Tambah TAS
-        edtNama = (EditText) findViewById(R.id.txtNama);
-        if (edtNama.getText().toString().length()==0){
-            edtNama.setError("Masukan Nama !!!");
-        }
-        edtNidn = (EditText) findViewById(R.id.txtNidn);
-        if (edtNidn.getText().toString().length()==0){
-            edtNidn.setError("Masukan Nidn !!!");
-        }
-        edtAlamat = (EditText) findViewById(R.id.txtAlamat);
-        if (edtAlamat.getText().toString().length()==0){
-            edtAlamat.setError("Masukan Alamat !!!");
-        }
-        edtEmail = (EditText) findViewById(R.id.txtEmail);
-        if (edtEmail.getText().toString().length()==0){
-            edtEmail.setError("Masukan Email !!!");
-        }
-        edtGelar = (EditText) findViewById(R.id.txtGelar);
-        if (edtGelar.getText().toString().length()==0){
-            edtGelar.setError("Masukan Gelar !!!");
-        }
+        edtNama = findViewById(R.id.txtNama);
+        edtNidn = findViewById(R.id.txtNidn);
+        edtAlamat = findViewById(R.id.txtAlamat);
+        edtEmail = findViewById(R.id.txtEmail);
+        edtGelar = findViewById(R.id.txtGelar);
         edtFoto = findViewById(R.id.txtFoto);
 
+
+
         cek_update();
+        cek_if_null();
+
+        InitializeUI();
 
         dataDosenService = RetrofitClient.getRetrofitInstance()
                 .create(DataDosenService.class);
@@ -125,34 +110,55 @@ public class InsertDosenActivity extends AppCompatActivity {
         });
     }
     private void tambah_dosen(){
-        String Image = ConvertingBitmapToString();
-        Call<Dosen> call;
-        if(update) {
+
+        if(edtNama.getText().toString().equals("")|edtNidn.getText().toString().equals("")|edtAlamat.getText().toString().equals("")
+                |edtEmail.getText().toString().equals("")|edtGelar.getText().toString().equals("")|edtFoto.getText().toString().equals(""))
+        {
+            Toast.makeText(InsertDosenActivity.this,"Isi semua data terlebih dahulu!",Toast.LENGTH_LONG);
+        }else if(update) {
+            String Image = ConvertingBitmapToString();
+            Call<Dosen> call;
             call = dataDosenService.updateDosen_foto("72170155", id, edtNama.getText().toString(),
                     edtNidn.getText().toString(), edtAlamat.getText().toString(), edtEmail.getText().toString(),
                     edtGelar.getText().toString(), Image);
+            call.enqueue(new Callback<Dosen>() {
+                @Override
+                public void onResponse(Call<Dosen> call, Response<Dosen> response) {
+                    Intent intent = new Intent(InsertDosenActivity.this,DaftarDosenActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+
+                @Override
+                public void onFailure(Call<Dosen> call, Throwable t) {
+                    Toast.makeText(InsertDosenActivity.this,"Something wrong....",Toast.LENGTH_LONG).show();
+                    //System.out.println(t.get);
+                }
+            });
         }
         else {
+            String Image = ConvertingBitmapToString();
+            Call<Dosen> call;
             call = dataDosenService.postDosen_foto("72170155", edtNama.getText().toString(),
                     edtNidn.getText().toString(), edtAlamat.getText().toString(), edtEmail.getText().toString(),
                     edtGelar.getText().toString(), Image);
-        }
-        call.enqueue(new Callback<Dosen>() {
-            @Override
-            public void onResponse(Call<Dosen> call, Response<Dosen> response) {
-                Intent intent = new Intent(InsertDosenActivity.this,DaftarDosenActivity.class);
-                startActivity(intent);
-                finish();
-            }
+            call.enqueue(new Callback<Dosen>() {
+                @Override
+                public void onResponse(Call<Dosen> call, Response<Dosen> response) {
+                    Intent intent = new Intent(InsertDosenActivity.this,DaftarDosenActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
 
-            @Override
-            public void onFailure(Call<Dosen> call, Throwable t) {
-                Toast.makeText(InsertDosenActivity.this,"Something wrong....",Toast.LENGTH_LONG).show();
-                //System.out.println(t.get);
-            }
-        });
+                @Override
+                public void onFailure(Call<Dosen> call, Throwable t) {
+                    Toast.makeText(InsertDosenActivity.this,"Something wrong....",Toast.LENGTH_LONG).show();
+                    //System.out.println(t.get);
+                }
+            });
+        }
+
     }
-    @RequiresApi(api = Build.VERSION_CODES.O)
     void cek_update()
     {
         Bundle extras = getIntent().getExtras();
@@ -167,9 +173,10 @@ public class InsertDosenActivity extends AppCompatActivity {
         edtEmail.setText(extras.getString("email"));
         edtGelar.setText(extras.getString("gelar"));
         Image = extras.getString("foto");
-        Picasso.with((TemporalAdjuster) InsertDosenActivity.this);
-//                .get("https://kpsi.fti.ukdw.ac.id/progmob/" +extras.getString("foto"))
-//                .into(part_image);
+        edtFoto.setText("terisi");
+        Picasso.with(InsertDosenActivity.this)
+                .load("https://kpsi.fti.ukdw.ac.id/progmob/" +extras.getString("foto"))
+                .into(part_image);
         part_image.setVisibility(View.VISIBLE);
 
     }
@@ -184,7 +191,9 @@ public class InsertDosenActivity extends AppCompatActivity {
                 part_image.setVisibility(View.VISIBLE);
                 //part_image.setEnabled(false);
                 //edtPathFoto.setVisibility(View.VISIBLE);
-                //edtPathFoto.setText(ConvertingBitmapToString());
+                edtFoto.setText("Terisi");
+                edtFoto.setError(null);
+
 
 
 
@@ -210,5 +219,233 @@ public class InsertDosenActivity extends AppCompatActivity {
                 }
                 break;
         }
+    }
+    
+    //TAMBAHAN TAS
+    public void cek_if_null(){
+        if (edtNidn.getText().toString().equals("")) {
+            edtNidn.setError("Silahkan mengisi NIDN dosen");
+            //valid_email = null;
+        }
+        if (edtNama.getText().toString().equals("")) {
+            edtNama.setError("Silahkan mengisi nama dosen");
+            //valid_email = null;
+        }
+        if (edtAlamat.getText().toString().equals("")) {
+            edtAlamat.setError("Silahkan mengisi alamat dosen");
+            //valid_email = null;
+        }
+        if (edtEmail.getText().toString().equals("")) {
+            edtEmail.setError("Silahkan mengisi email dosen");
+            //valid_email = null;
+        }
+        if (edtGelar.getText().toString().equals("")) {
+            edtGelar.setError("Silahkan mengisi gelar dosen");
+            //valid_email = null;
+        }
+        if (edtFoto.getText().toString().equals("")) {
+            edtFoto.setError("Silahkan mengisi foto dosen");
+            //valid_email = null;
+        }
+    }
+
+    public void InitializeUI() {
+
+        edtNama.addTextChangedListener(new TextWatcher() {
+
+                                           @Override
+                                           public void onTextChanged(CharSequence s, int start, int before,
+                                                                     int count) {
+                                               // TODO Auto-generated method stub
+
+                                           }
+
+                                           @Override
+                                           public void beforeTextChanged(CharSequence s, int start, int count,
+                                                                         int after) {
+                                               // TODO Auto-generated method stub
+
+
+                                           }
+
+                                           @Override
+                                           public void afterTextChanged(Editable s) {
+                                               // TODO Auto-generated method stub
+
+                                               // TODO Auto-generated method stub
+                                               Is_Not_Null(edtNama);
+                                           }
+            public void Is_Not_Null(EditText edt) {
+                if (edt.getText().toString().equals("")) {
+                    edt.setError("Nama Dosen Kosong");
+                    //valid_email = null;
+                }
+            }
+                                       });
+        edtNidn.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before,
+                                      int count) {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count,
+                                          int after) {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // TODO Auto-generated method stub
+
+                // TODO Auto-generated method stub
+                Is_Not_Null(edtNidn); // pass your EditText Obj here.
+            }
+            public void Is_Not_Null(EditText edt) {
+                if (edt.getText().toString().equals("")) {
+                    edt.setError("NIDN Dosen Kosong");
+                    //valid_email = null;
+                }
+            }
+        });
+
+        edtAlamat.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before,
+                                      int count) {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count,
+                                          int after) {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // TODO Auto-generated method stub
+
+                // TODO Auto-generated method stub
+                Is_Not_Null(edtAlamat); // pass your EditText Obj here.
+            }
+            public void Is_Not_Null(EditText edt) {
+                if (edt.getText().toString().equals("")) {
+                    edt.setError("Alamat Dosen Kosong");
+                    //valid_email = null;
+                }
+            }
+        });
+
+        edtGelar.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before,
+                                      int count) {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count,
+                                          int after) {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // TODO Auto-generated method stub
+
+                // TODO Auto-generated method stub
+                Is_Not_Null(edtGelar); // pass your EditText Obj here.
+            }
+            public void Is_Not_Null(EditText edt) {
+                if (edt.getText().toString().equals("")) {
+                    edt.setError("Gelar Dosen Kosong");
+                    //valid_email = null;
+                }
+            }
+        });
+
+        edtFoto.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before,
+                                      int count) {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count,
+                                          int after) {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // TODO Auto-generated method stub
+
+                // TODO Auto-generated method stub
+                Is_Not_Null(edtFoto); // pass your EditText Obj here.
+            }
+            public void Is_Not_Null(EditText edt) {
+                if (edt.getText().toString().equals("")) {
+                    edt.setError("Foto Dosen Kosong");
+                    //valid_email = null;
+                }
+            }
+        });
+
+        edtEmail.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before,
+                                      int count) {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count,
+                                          int after) {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // TODO Auto-generated method stub
+
+                // TODO Auto-generated method stub
+                Is_Valid_Email(edtEmail);
+            }
+
+            public void Is_Valid_Email(EditText edt) {
+                if (edt.getText().toString().equals("")) {
+                    edt.setError("Invalid Email Address");
+                    valid_email = null;
+                } else if (isEmailValid(edt.getText().toString()) == false) {
+                    edt.setError("Invalid Email Address");
+                    valid_email = null;
+                } else {
+                    valid_email = edt.getText().toString();
+                }
+            }
+
+            boolean isEmailValid(CharSequence email) {
+                return android.util.Patterns.EMAIL_ADDRESS.matcher(email)
+                        .matches();
+            }
+        });
     }
 }
